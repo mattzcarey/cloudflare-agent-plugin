@@ -1,6 +1,6 @@
 ---
 name: new-cf-worker
-description: Create a new Cloudflare Workers project with modern tooling. Use when the user wants to start a new Cloudflare Worker, create a Workers project, or scaffold a CF worker.
+description: Create a new Cloudflare Workers project with modern tooling. Use when the user wants to start a new Cloudflare Worker, create a Workers project, or scaffold a CF worker project.
 ---
 
 # Create New Cloudflare Workers Project
@@ -96,7 +96,11 @@ Configure for wrangler types (not @cloudflare/workers-types):
 
 ```typescript
 export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  async fetch(
+    request: Request,
+    env: Env,
+    ctx: ExecutionContext
+  ): Promise<Response> {
     const url = new URL(request.url);
 
     if (url.pathname === "/") {
@@ -129,8 +133,8 @@ This gives Claude access to the Cloudflare documentation MCP server:
 {
   "mcpServers": {
     "cloudflare-docs": {
-      "command": "npx",
-      "args": ["mcp-remote", "https://docs.mcp.cloudflare.com/sse"]
+      "type": "http",
+      "url": "https://docs.mcp.cloudflare.com/mcp"
     }
   }
 }
@@ -160,19 +164,15 @@ When adding KV, D1, R2, or other bindings to wrangler.jsonc:
 
 ```jsonc
 {
-  "kv_namespaces": [
-    { "binding": "MY_KV", "id": "<namespace-id>" }
-  ],
-  "d1_databases": [
-    { "binding": "DB", "database_name": "my-db", "database_id": "<db-id>" }
-  ],
-  "r2_buckets": [
-    { "binding": "BUCKET", "bucket_name": "my-bucket" }
-  ]
+  "kv_namespaces": [{ "binding": "MY_KV" }],
+  "d1_databases": [{ "binding": "DB" }],
+  "r2_buckets": [{ "binding": "BUCKET" }]
 }
 ```
 
 Then run `npm run types` to regenerate the Env type.
+
+When the user deploys, the ids and names of the new resources with be added dynamically to `wrangler.jsonc`.
 
 ## After Setup
 

@@ -4,11 +4,7 @@ A Claude Code plugin that provides a skill for creating new Cloudflare Workers p
 
 ## Installation
 
-```bash
-/plugin install /path/to/cloudflare-plugin-claude
-```
-
-Or clone and install:
+Clone and install:
 
 ```bash
 git clone https://github.com/mattzcarey/cloudflare-plugin-claude
