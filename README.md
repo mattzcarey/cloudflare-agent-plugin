@@ -1,14 +1,21 @@
 # Cloudflare Worker Skill Plugin
 
-A Claude Code plugin that provides a skill for creating new Cloudflare Workers projects with modern tooling.
+A plugin that provides a skill for creating new Cloudflare Workers projects with modern tooling.
 
 ## Installation
 
-Clone and install:
+### Claude Code
 
 ```bash
-git clone https://github.com/mattzcarey/cloudflare-plugin-claude
-/plugin install ./cloudflare-plugin-claude
+git clone https://github.com/mattzcarey/cloudflare-agent-plugin
+/plugin install ./cloudflare-agent-plugin
+```
+
+### OpenCode
+
+```bash
+mkdir -p ~/.config/opencode/skill/new-cf-worker
+curl -o ~/.config/opencode/skill/new-cf-worker/SKILL.md https://raw.githubusercontent.com/mattzcarey/cloudflare-agent-plugin/main/skills/new-cf-worker/SKILL.md
 ```
 
 ## Usage

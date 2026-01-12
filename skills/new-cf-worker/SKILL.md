@@ -52,12 +52,11 @@ npm init -y
   "name": "<project-name>",
   "main": "src/index.ts",
   "compatibility_date": "<TODAY'S DATE>",
-  "compatibility_flags": ["nodejs_compat"],
   "observability": {
     "logs": {
       "enabled": true
     },
-    "tracing": {
+    "traces": {
       "enabled": true
     }
   }
@@ -125,7 +124,16 @@ dist/
 worker-configuration.d.ts
 ```
 
-### 8. Create .mcp.json for Cloudflare documentation access
+### 8. Create .env for local secrets
+
+```
+# Local development secrets (not committed to git)
+# MY_SECRET=your_secret_here
+```
+
+Wrangler automatically loads `.env` for local development. Add secrets here that your worker needs.
+
+### 9. Create .mcp.json for Cloudflare documentation access
 
 This gives Claude access to the Cloudflare documentation MCP server:
 
@@ -140,7 +148,7 @@ This gives Claude access to the Cloudflare documentation MCP server:
 }
 ```
 
-### 9. Install and verify
+### 10. Install and verify
 
 ```bash
 npm install
@@ -155,12 +163,32 @@ Fix any type errors before finishing.
 - **wrangler types**: Generates `worker-configuration.d.ts` with `Env` type from wrangler.jsonc bindings
 - **tsgo**: Fast TypeScript type checker (faster than tsc)
 - **compatibility_date**: Always use today's date for new projects
-- **nodejs_compat**: Enables Node.js API compatibility
 - **.mcp.json**: Connects Claude to Cloudflare documentation for contextual help
+- **.env**: Local secrets for development (automatically loaded by wrangler)
+
+## Node.js Compatibility
+
+Only add `nodejs_compat` if the project needs Node.js APIs (adds slight overhead). When needed:
+
+1. Add to wrangler.jsonc:
+```jsonc
+{
+  "compatibility_flags": ["nodejs_compat"]
+}
+```
+
+2. Add types to package.json devDependencies:
+```json
+{
+  "devDependencies": {
+    "@types/node": "latest"
+  }
+}
+```
 
 ## Adding Bindings
 
-When adding KV, D1, R2, or other bindings to wrangler.jsonc:
+Wrangler supports automatic provisioning (beta) - just add the binding name without IDs:
 
 ```jsonc
 {
@@ -172,7 +200,11 @@ When adding KV, D1, R2, or other bindings to wrangler.jsonc:
 
 Then run `npm run types` to regenerate the Env type.
 
-When the user deploys, the ids and names of the new resources with be added dynamically to `wrangler.jsonc`.
+When you deploy with `npm run deploy`, Wrangler automatically:
+- Creates the resources on Cloudflare's network
+- Writes the IDs back to your `wrangler.jsonc`
+
+For local dev, resources are created automatically and persist between runs.
 
 ## After Setup
 
